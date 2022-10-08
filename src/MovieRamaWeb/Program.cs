@@ -1,23 +1,17 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MovieRamaWeb.Data;
-using MovieRamaWeb.Data.Repositories;
-using MovieRamaWeb.Data.Services;
-using MovieRamaWeb.Services;
+using Infrastructure.Sql.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MovieRamaDbContextConnection") ?? throw new InvalidOperationException("Connection string 'MovieRamaDbContextConnection' not found.");
 
 
+builder.Services.AddSQLInfrastructure(builder.Configuration);
 
-builder.Services.AddScoped<IAuthService, IdentityAuthService>();
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-
-builder.Services.AddDbContext<MovieRamaDbContext>(options =>
-    options.UseSqlServer(connectionString));
-
+//since we use default UI
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<MovieRamaDbContext>();
+
 
 // Add services to the container.
 builder.Services.AddRazorPages( options =>
@@ -28,6 +22,8 @@ builder.Services.AddRazorPages( options =>
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+app.Services.EnsureDatabaseCreated();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

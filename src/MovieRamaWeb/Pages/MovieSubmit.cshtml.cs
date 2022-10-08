@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MovieRamaWeb.Services;
+using MovieRamaWeb.Application.Services;
 using MovieRamaWeb.Domain;
 using System.ComponentModel.DataAnnotations;
 

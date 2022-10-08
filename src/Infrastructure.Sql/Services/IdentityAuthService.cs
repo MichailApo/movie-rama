@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MovieRamaWeb.Services;
+using MovieRamaWeb.Application.Services;
 using System.Security.Claims;
 
 namespace MovieRamaWeb.Data.Services

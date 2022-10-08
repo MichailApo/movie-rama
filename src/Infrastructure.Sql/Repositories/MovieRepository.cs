@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieRamaWeb.Domain;
 using MovieRamaWeb.Domain.Enums;
-using MovieRamaWeb.Requests;
-using MovieRamaWeb.Services;
+using MovieRamaWeb.Application.Requests;
+using MovieRamaWeb.Application.Services;
 
 namespace MovieRamaWeb.Data.Repositories
 {

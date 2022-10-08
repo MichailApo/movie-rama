@@ -1,6 +1,6 @@
-﻿using MovieRamaWeb.Domain.Enums;
-
-namespace MovieRamaWeb.Requests
+﻿
+using MovieRamaWeb.Domain.Enums;
+namespace MovieRamaWeb.Application.Requests
 {
     public class MovieListQueryParameters
     {

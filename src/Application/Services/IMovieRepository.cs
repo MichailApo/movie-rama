@@ -1,7 +1,7 @@
 ﻿using MovieRamaWeb.Domain;
-using MovieRamaWeb.Requests;
+using MovieRamaWeb.Application.Requests;
 
-namespace MovieRamaWeb.Services
+namespace MovieRamaWeb.Application.Services
 {
     public interface IMovieRepository
     {

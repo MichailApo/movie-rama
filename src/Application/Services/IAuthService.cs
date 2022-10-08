@@ -1,7 +1,7 @@
 ﻿using MovieRamaWeb.Domain;
 using System.Security.Claims;
 
-namespace MovieRamaWeb.Services
+namespace MovieRamaWeb.Application.Services
 {
     public interface IAuthService
     {
