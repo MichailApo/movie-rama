@@ -12,8 +12,28 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
-@if (SignInManager.IsSignedIn(User))
-{
+<div class="row">
+    <div class="col-md-6">
+        @foreach (var movie in Model.Movies)
+        {
+            <h1>@Html.DisplayFor(m => movie.Title)</h1>
+            <div>Posted by @movie.Creator.UserName @movie.PublishedAt</div>
+            <br>
+            <p>@movie.Description</p>
+            <div class="row">
+                <a href="">@movie.NumberOfLikes likes</a>
+                <a href="">@movie.NumberOfHates hates</a>
 
-    <a asp-page="/moviesubmit">New Movie</a>
-}
+            </div>
+        }
+    </div>
+    <div class="col-md-2">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a asp-page="/moviesubmit">New Movie</a>
+        }
+    </div>
+</div>
+
+
+

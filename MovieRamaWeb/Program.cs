@@ -20,7 +20,11 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddEntityFrameworkStores<MovieRamaDbContext>();
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages( options =>
+{
+    options.Conventions.AddPageRoute("/index", "/creator/{id}");
+
+});
 builder.Services.AddControllers();
 
 var app = builder.Build();
