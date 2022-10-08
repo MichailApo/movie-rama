@@ -1,8 +1,17 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MovieRamaWeb.Data;
+using MovieRamaWeb.Data.Repositories;
+using MovieRamaWeb.Data.Services;
+using MovieRamaWeb.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MovieRamaDbContextConnection") ?? throw new InvalidOperationException("Connection string 'MovieRamaDbContextConnection' not found.");
+
+
+
+builder.Services.AddScoped<IAuthService, IdentityAuthService>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
 builder.Services.AddDbContext<MovieRamaDbContext>(options =>
     options.UseSqlServer(connectionString));
