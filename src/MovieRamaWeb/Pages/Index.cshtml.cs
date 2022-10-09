@@ -27,6 +27,8 @@ namespace MovieRamaWeb.Pages
         /// </summary>
         public MovieSortType? SortType { get; private set; }
 
+        public int? SelectedCreatorId { get; set; }
+
         public IndexModel(ILogger<IndexModel> logger, IMovieRepository movieRepository)
         {
             _logger = logger;
@@ -35,8 +37,11 @@ namespace MovieRamaWeb.Pages
 
         public async Task OnGetAsync([FromQuery] MovieListQueryParameters queryParameters, [FromRoute] int? id = null)
         {
-            SortOrder = queryParameters.SortOrder;
+            SortOrder = queryParameters.SortOrder == SortOrder.Asc 
+                ? SortOrder.Desc 
+                : SortOrder.Asc; ;
             SortType = queryParameters.SortType;
+            SelectedCreatorId = id;
             Movies = id.HasValue
                 ? await _movieRepository.GetMoviesByCreatorIdAsync(id.Value, queryParameters)
                 : await _movieRepository.GetMoviesAsync(queryParameters);

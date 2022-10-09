@@ -42,7 +42,7 @@ namespace MovieRamaWeb.Pages
             try
             {
                 var user = _authService.GetUser(User);
-                var movie = Movie.Create(MovieTitle, MovieDescription, user, DateTime.UtcNow);
+                var movie = Movie.CreateNew(MovieTitle, MovieDescription, user, DateTime.UtcNow);
                 await _movieRepository.AddMovieAsync(movie);
             }
             catch (Exception e)

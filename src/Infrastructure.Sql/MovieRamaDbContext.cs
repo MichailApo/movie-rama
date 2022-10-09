@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Infrastructure.Sql;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace MovieRamaWeb.Data
     {
         public DbSet<User> Users { get; set; }
         public DbSet<MovieEntity> Movies { get; set; }
+        public DbSet<MovieReactionEntity> MovieReactions { get; set; }
 
         public MovieRamaDbContext(DbContextOptions options) : base(options)
         {
@@ -18,12 +20,29 @@ namespace MovieRamaWeb.Data
 
             modelBuilder.Entity<MovieEntity>().ToTable("Movies"); ;
             modelBuilder.Entity<MovieEntity>().HasKey(movie => movie.Id);
-            modelBuilder.Entity<MovieEntity>().Property(movie => movie.Title).HasMaxLength(50).IsRequired();
-            modelBuilder.Entity<MovieEntity>().Property(movie => movie.Description).IsRequired();
+            modelBuilder.Entity<MovieEntity>().Property(movie => movie.Title);
+            modelBuilder.Entity<MovieEntity>().Property(movie => movie.Description);
             modelBuilder.Entity<MovieEntity>().Property(movie => movie.CreatorId).HasColumnName("CreatedBy");
             modelBuilder.Entity<MovieEntity>().HasOne(movie => movie.Creator);
             modelBuilder.Entity<MovieEntity>().HasIndex(movie => movie.CreatorId);
             modelBuilder.Entity<MovieEntity>().HasIndex(movie => movie.CreatedAt);
+            modelBuilder.Entity<MovieEntity>()
+                .HasMany(movie => movie.Reactions)
+                .WithOne(movie => movie.Movie)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MovieReactionEntity>().ToTable("Reaction");
+            modelBuilder.Entity<MovieReactionEntity>().HasKey(reaction => new { reaction.MovieId, reaction.UserId });
+            modelBuilder.Entity<MovieReactionEntity>().Property(reaction => reaction.UserId);
+            modelBuilder.Entity<MovieReactionEntity>().Property(reaction => reaction.MovieId);
+            modelBuilder.Entity<MovieReactionEntity>().Property(reaction => reaction.Active).HasDefaultValue(true);
+            modelBuilder.Entity<MovieReactionEntity>().HasOne(reaction => reaction.Movie);
+            modelBuilder.Entity<MovieReactionEntity>().HasOne(reaction => reaction.User);
+
+            modelBuilder.Entity<User>()
+                .HasMany(user => user.Reactions)
+                .WithOne(user => user.User)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

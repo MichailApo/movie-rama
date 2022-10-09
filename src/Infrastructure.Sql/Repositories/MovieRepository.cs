@@ -34,7 +34,7 @@ namespace MovieRamaWeb.Data.Repositories
         public async Task<IEnumerable<Movie>> GetMoviesAsync(MovieListQueryParameters filterParameters)
         {
             return await ApplyMovieOrdering(_dbContext.Movies.AsNoTracking(), filterParameters)
-                .Select(m => Movie.Create(m.Title, m.Description, new Domain.User(m.Creator.Id, m.Creator.UserName), m.CreatedAt))
+                .Select(m => Movie.Create(m.Id,m.Title, m.Description, new Domain.User(m.Creator.Id, m.Creator.UserName), m.CreatedAt,0,0))
                 .ToArrayAsync();
         }
 
@@ -42,7 +42,7 @@ namespace MovieRamaWeb.Data.Repositories
         {
             var filteredMovies = _dbContext.Movies.Where(m => m.CreatorId == creatorId);
             return await ApplyMovieOrdering(filteredMovies, filterParameters)
-                .Select(m => Movie.Create(m.Title, m.Description, new Domain.User(m.Creator.Id, m.Creator.UserName), m.CreatedAt))
+                .Select(m => Movie.Create(m.Id, m.Title, m.Description, new Domain.User(m.Creator.Id, m.Creator.UserName), m.CreatedAt, 0, 0))
                 .ToArrayAsync();
         }
 
