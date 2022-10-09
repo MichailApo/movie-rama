@@ -10,6 +10,6 @@ namespace MovieRamaWeb.Data
         public DateTime CreatedAt { get; set; }
         public User Creator { get; set; }
         public int CreatorId { get; set; }
-        public IEnumerable<MovieReactionEntity> Reactions { get; set; } = Enumerable.Empty<MovieReactionEntity>();
+        public ICollection<MovieReactionEntity> Reactions { get; set; } = new List<MovieReactionEntity>();
     }
 }

@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A42C20DF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraStructure.Sql.Unit", "tests\InfraStructure.Sql.Unit\InfraStructure.Sql.Unit.csproj", "{4EB738F7-44DE-4200-9DF5-48A3D3687A96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Sql.Integration", "tests\Infrastructure.Sql.Integration\Infrastructure.Sql.Integration.csproj", "{B8B5E5EC-AD03-4041-8D28-9302FEFEB6E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +43,17 @@ Global
 		{4EB738F7-44DE-4200-9DF5-48A3D3687A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EB738F7-44DE-4200-9DF5-48A3D3687A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EB738F7-44DE-4200-9DF5-48A3D3687A96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B5E5EC-AD03-4041-8D28-9302FEFEB6E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B5E5EC-AD03-4041-8D28-9302FEFEB6E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B5E5EC-AD03-4041-8D28-9302FEFEB6E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B5E5EC-AD03-4041-8D28-9302FEFEB6E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4EB738F7-44DE-4200-9DF5-48A3D3687A96} = {A42C20DF-135F-4E49-BEB0-5C7DC281D4D3}
+		{B8B5E5EC-AD03-4041-8D28-9302FEFEB6E7} = {A42C20DF-135F-4E49-BEB0-5C7DC281D4D3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D3969C82-7860-4FA5-8022-5E1E352603CC}

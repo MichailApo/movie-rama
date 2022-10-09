@@ -123,7 +123,7 @@ namespace InfraStructure.Sql.Unit
         {
             var users = new int[] { 1, 2, 3, 4, 5 };
             var userId = new Faker().PickRandom(users);
-            var fakes = GetFakes(10, users);
+            var fakes = GetFakes(10, users, userId);
             var moviesMockSet = DbSetMocker<MovieEntity>.GetMockSet(fakes.AsAsyncQueryable());
 
             _dbContextMock
@@ -138,7 +138,7 @@ namespace InfraStructure.Sql.Unit
         }
 
 
-        private List<MovieEntity> GetFakes(int count, int[] userIds)
+        private List<MovieEntity> GetFakes(int count, int[] userIds,int? creatorIdInput = null)
         {
             
             var movieIds = new int[] { 10, 20, 30, 40, 50 };
@@ -154,7 +154,7 @@ namespace InfraStructure.Sql.Unit
 
             var faker = new Faker<MovieEntity>().Rules((f, m) =>
             {
-                var creatorId = f.PickRandom(userIds);
+                var creatorId = creatorIdInput ?? f.PickRandom(userIds);
                 m.CreatorId = creatorId;
                 m.Reactions = reactionsFaker.GenerateBetween(0, 10);
                 m.CreatedAt = f.Date.Past();
