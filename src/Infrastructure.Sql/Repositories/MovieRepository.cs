@@ -3,6 +3,7 @@ using MovieRamaWeb.Domain;
 using MovieRamaWeb.Domain.Enums;
 using MovieRamaWeb.Application.Requests;
 using MovieRamaWeb.Application.Services;
+using PreferenceType = Domain.Enums.PreferenceType;
 
 namespace MovieRamaWeb.Data.Repositories
 {
@@ -33,27 +34,45 @@ namespace MovieRamaWeb.Data.Repositories
 
         public async Task<IEnumerable<Movie>> GetMoviesAsync(MovieListQueryParameters filterParameters)
         {
-            return await ApplyMovieOrdering(_dbContext.Movies.AsNoTracking(), filterParameters)
-                .Select(m => Movie.Create(m.Id,m.Title, m.Description, new Domain.User(m.Creator.Id, m.Creator.UserName), m.CreatedAt,0,0))
-                .ToArrayAsync();
+            var projetions = await MapEntities(_dbContext.Movies).ToListAsync();
+
+            return ApplyMovieOrdering(projetions, filterParameters);
+
         }
 
         public async Task<IEnumerable<Movie>> GetMoviesByCreatorIdAsync(int creatorId, MovieListQueryParameters filterParameters)
         {
-            var filteredMovies = _dbContext.Movies.Where(m => m.CreatorId == creatorId);
-            return await ApplyMovieOrdering(filteredMovies, filterParameters)
-                .Select(m => Movie.Create(m.Id, m.Title, m.Description, new Domain.User(m.Creator.Id, m.Creator.UserName), m.CreatedAt, 0, 0))
-                .ToArrayAsync();
+            var projetions = await MapEntities(_dbContext.Movies.Where(m => m.CreatorId == creatorId)).ToListAsync();
+
+            return ApplyMovieOrdering(projetions, filterParameters);
         }
 
-        private IQueryable<MovieEntity> ApplyMovieOrdering(IQueryable<MovieEntity> movies, MovieListQueryParameters filterParameters)
+
+        private IEnumerable<Movie> ApplyMovieOrdering(IEnumerable<Movie> movies, MovieListQueryParameters filterParameters)
         {
             return (filterParameters.SortType, filterParameters.SortOrder) switch
             {
-                (MovieSortType.Date, SortOrder.Asc) => movies.AsNoTracking().OrderBy(m => m.CreatedAt),
-                (MovieSortType.Date, SortOrder.Desc) => movies.AsNoTracking().OrderByDescending(m => m.CreatedAt),
-                (_, _) => movies.AsNoTracking().OrderByDescending(m => m.CreatedAt)
+                (MovieSortType.Date, SortOrder.Asc) => movies.OrderBy(m => m.PublishedAt),
+                (MovieSortType.Date, SortOrder.Desc) => movies.OrderByDescending(m => m.PublishedAt),
+                (MovieSortType.Likes, SortOrder.Asc) => movies.OrderBy(m => m.NumberOfLikes),
+                (MovieSortType.Likes, SortOrder.Desc) => movies.OrderByDescending(m => m.NumberOfLikes),
+                (MovieSortType.Hates, SortOrder.Asc) => movies.OrderBy(m => m.NumberOfHates),
+                (MovieSortType.Hates, SortOrder.Desc) => movies.OrderByDescending(m => m.NumberOfHates),
+                (_, _) => movies.OrderByDescending(m => m.PublishedAt)
             };
         }
+
+        private IQueryable<Movie> MapEntities(IQueryable<MovieEntity> movies) => movies.AsNoTracking()
+                .Select(m =>
+                Movie.Create(
+                    m.Id,
+                    m.Title,
+                    m.Description,
+                    new Domain.User(m.Creator.Id, m.Creator.UserName),
+                    m.CreatedAt,
+                    m.Reactions.Count(r => r.Active && r.Preference == PreferenceType.Like),
+                    m.Reactions.Count(r => r.Active && r.Preference == PreferenceType.Hate)
+                    )
+                );
     }
 }

@@ -5,6 +5,8 @@ using MovieRamaWeb.Data.Services;
 using MovieRamaWeb.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Application.Services;
+using Infrastructure.Sql.Repositories;
 
 namespace Infrastructure.Sql.Extensions
 {
@@ -14,6 +16,7 @@ namespace Infrastructure.Sql.Extensions
         {
             services.AddScoped<IAuthService, IdentityAuthService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IReactionRepository, ReactionRepository>();
             var connectionString = configuration.GetConnectionString("MovieRamaDbContextConnection") ?? throw new InvalidOperationException("Connection string 'MovieRamaDbContextConnection' not found.");
             services.AddDbContext<MovieRamaDbContext>(options => options.UseSqlServer(connectionString));
 

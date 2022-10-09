@@ -7,9 +7,9 @@ namespace MovieRamaWeb.Data
 {
     public class MovieRamaDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<MovieEntity> Movies { get; set; }
-        public DbSet<MovieReactionEntity> MovieReactions { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<MovieEntity> Movies { get; set; }
+        public virtual DbSet<MovieReactionEntity> MovieReactions { get; set; }
 
         public MovieRamaDbContext(DbContextOptions options) : base(options)
         {
