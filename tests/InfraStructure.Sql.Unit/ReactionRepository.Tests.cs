@@ -47,7 +47,7 @@ namespace InfraStructure.Sql.Unit
 
             fakes.AddRange(expectedFaker.Generate(expectedCount));
 
-            var moviesMockSet = GetMockSet(fakes.AsAsyncQueryable());
+            var moviesMockSet = DbSetMocker<MovieReactionEntity>.GetMockSet(fakes.AsAsyncQueryable());
 
             _dbContextMock
                 .Setup(m => m.MovieReactions)
@@ -66,17 +66,6 @@ namespace InfraStructure.Sql.Unit
 
             await _sut.Awaiting(f => f.GetUserReactionsAsync(1)).Should().ThrowAsync<Exception>();
 
-        }
-
-        private Mock<DbSet<MovieReactionEntity>> GetMockSet(IQueryable<MovieReactionEntity> fakeSet)
-        {
-            var moviesMockSet = new Mock<DbSet<MovieReactionEntity>>();
-            moviesMockSet.As<IQueryable<MovieReactionEntity>>().Setup(m => m.Provider).Returns(fakeSet.Provider);
-            moviesMockSet.As<IQueryable<MovieReactionEntity>>().Setup(m => m.Expression).Returns(fakeSet.Expression);
-            moviesMockSet.As<IQueryable<MovieReactionEntity>>().Setup(m => m.ElementType).Returns(fakeSet.ElementType);
-            moviesMockSet.As<IQueryable<MovieReactionEntity>>().Setup(m => m.GetEnumerator()).Returns(fakeSet.GetEnumerator());
-
-            return moviesMockSet;
         }
     }
 }
