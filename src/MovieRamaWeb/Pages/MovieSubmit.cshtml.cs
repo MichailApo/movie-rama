@@ -42,6 +42,11 @@ namespace MovieRamaWeb.Pages
             try
             {
                 var user = _authService.GetUser(User);
+                if (user == null)
+                {
+                    return Redirect("/Identity/Account/Login");
+                }
+
                 var movie = Movie.CreateNew(MovieTitle, MovieDescription, user, DateTime.UtcNow);
                 await _movieRepository.AddMovieAsync(movie);
             }

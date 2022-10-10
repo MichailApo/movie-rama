@@ -4,6 +4,9 @@ using MovieRamaWeb.Domain;
 using MovieRamaWeb.Domain.Enums;
 using MovieRamaWeb.Application.Requests;
 using MovieRamaWeb.Application.Services;
+using Application.Services;
+using MovieRamaWeb.ViewModels;
+using Domain.Enums;
 
 namespace MovieRamaWeb.Pages
 {
@@ -11,11 +14,12 @@ namespace MovieRamaWeb.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IMovieRepository _movieRepository;
+        private readonly IReactionService _reactionService;
 
         /// <summary>
         /// Data to Display
         /// </summary>
-        public IEnumerable<Movie> Movies { get; private set; } = Enumerable.Empty<Movie>();
+        public IEnumerable<MovieViewModel> Movies { get; private set; } = Enumerable.Empty<MovieViewModel>();
 
         /// <summary>
         /// Ordering of the page
@@ -29,22 +33,34 @@ namespace MovieRamaWeb.Pages
 
         public int? SelectedCreatorId { get; set; }
 
-        public IndexModel(ILogger<IndexModel> logger, IMovieRepository movieRepository)
+        public IndexModel(ILogger<IndexModel> logger, IMovieRepository movieRepository , IReactionService reactionService)
         {
             _logger = logger;
             _movieRepository = movieRepository;
+            _reactionService = reactionService;
         }
 
         public async Task OnGetAsync([FromQuery] MovieListQueryParameters queryParameters, [FromRoute] int? id = null)
         {
             SortOrder = queryParameters.SortOrder == SortOrder.Asc 
                 ? SortOrder.Desc 
-                : SortOrder.Asc; ;
+                : SortOrder.Asc;
             SortType = queryParameters.SortType;
             SelectedCreatorId = id;
-            Movies = id.HasValue
+            
+            var movies = id.HasValue
                 ? await _movieRepository.GetMoviesByCreatorIdAsync(id.Value, queryParameters)
                 : await _movieRepository.GetMoviesAsync(queryParameters);
+            
+            var userReactions = await _reactionService.GetUserReactionsAsync(User);
+            
+            Movies = movies.Select(f => {
+                
+                return userReactions.TryGetValue(f.Id, out var pref) 
+                ? new MovieViewModel(f, pref) 
+                : new MovieViewModel(f, null);
+                }
+            );
         }
     }
 }

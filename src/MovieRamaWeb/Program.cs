@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MovieRamaWeb.Data;
 using Infrastructure.Sql.Extensions;
+using Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MovieRamaDbContextConnection") ?? throw new InvalidOperationException("Connection string 'MovieRamaDbContextConnection' not found.");
@@ -8,10 +9,12 @@ var connectionString = builder.Configuration.GetConnectionString("MovieRamaDbCon
 
 builder.Services.AddSQLInfrastructure(builder.Configuration);
 
+
 //since we use default UI
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<MovieRamaDbContext>();
 
+builder.Services.AddScoped<IReactionService, ReactionService>();
 
 // Add services to the container.
 builder.Services.AddRazorPages( options =>
