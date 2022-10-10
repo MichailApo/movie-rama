@@ -4,6 +4,15 @@ using Infrastructure.Sql.Extensions;
 using Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var env = builder.Environment;
+string path = Path.Combine(env.ContentRootPath, "");
+
+builder.Configuration
+    .SetBasePath(path)
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{env.EnvironmentName}.json")
+    .AddEnvironmentVariables();
+
 var connectionString = builder.Configuration.GetConnectionString("MovieRamaDbContextConnection") ?? throw new InvalidOperationException("Connection string 'MovieRamaDbContextConnection' not found.");
 
 

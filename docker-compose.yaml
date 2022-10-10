@@ -1,5 +1,16 @@
 version: "3.9"
 services:
+  webapp:
+        image: webapp
+        build:
+            context: .
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+        depends_on:
+            - db
+        ports:
+            - 80:80
+            - 443:443
   db:
     environment:
       ACCEPT_EULA: "Y"
