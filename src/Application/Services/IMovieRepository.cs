@@ -8,5 +8,6 @@ namespace MovieRamaWeb.Application.Services
         Task<int> AddMovieAsync(Movie movie);
         Task<IEnumerable<Movie>> GetMoviesAsync(MovieListQueryParameters filterParameters);
         Task<IEnumerable<Movie>> GetMoviesByCreatorIdAsync(int creatorId, MovieListQueryParameters filterParameters);
+        Task<Movie?> GetMovieByIdAsync(int movieId);
     }
 }

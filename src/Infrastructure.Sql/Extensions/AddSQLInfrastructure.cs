@@ -18,7 +18,10 @@ namespace Infrastructure.Sql.Extensions
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IReactionRepository, ReactionRepository>();
             var connectionString = configuration.GetConnectionString("MovieRamaDbContextConnection") ?? throw new InvalidOperationException("Connection string 'MovieRamaDbContextConnection' not found.");
-            services.AddDbContext<MovieRamaDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<MovieRamaDbContext>(options => { 
+                options.UseSqlServer(connectionString);
+                options.EnableSensitiveDataLogging();
+            });
 
             return services;
         }

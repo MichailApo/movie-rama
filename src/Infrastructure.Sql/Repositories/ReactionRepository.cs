@@ -16,14 +16,34 @@ namespace Infrastructure.Sql.Repositories
 
         public async Task AddReactionAsync(Reaction reaction)
         {
-            var entity = new MovieReactionEntity
+
+            var existing = _dbContext.MovieReactions.FirstOrDefault(f =>
+            f.MovieId == reaction.MovieId
+            && f.UserId == reaction.UserId);
+
+            if (existing == null)
             {
-                Active = true,
-                MovieId = reaction.MovieId,
-                UserId = reaction.UserId,
-                Preference = reaction.Preference
-            };
-            await _dbContext.MovieReactions.AddAsync(entity);
+                var entity = new MovieReactionEntity
+                {
+                    Active = true,
+                    MovieId = reaction.MovieId,
+                    UserId = reaction.UserId,
+                    Preference = reaction.Preference
+                };
+                await _dbContext.MovieReactions.AddAsync(entity);
+                await _dbContext.SaveChangesAsync();
+                return;
+            }
+
+            if (existing.Preference == reaction.Preference)
+            {
+                //No-op
+                return;
+            }
+
+            existing.Preference = reaction.Preference;
+            existing.Active = true;
+            _dbContext.MovieReactions.Update(existing);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -33,6 +53,21 @@ namespace Infrastructure.Sql.Repositories
                 .Where(m => m.UserId == userId && m.Active)
                 .Select(m => Reaction.Create(m.UserId, m.MovieId, m.Preference))
                 .ToListAsync();
+        }
+
+        public async Task RemoveReactionAsync(int userId, int movieId)
+        {
+            var existingActive = _dbContext.MovieReactions
+                .FirstOrDefault(m => m.UserId == userId 
+                && m.MovieId == movieId
+                && m.Active);
+            
+            if( existingActive != null)
+            {
+                existingActive.Active = false;
+                _dbContext.Update(existingActive);
+                await _dbContext.SaveChangesAsync();
+            }
         }
     }
 }

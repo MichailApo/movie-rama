@@ -32,6 +32,13 @@ namespace MovieRamaWeb.Data.Repositories
 
         }
 
+        public async Task<Movie?> GetMovieByIdAsync(int movieId)
+        {
+            
+            return await MapEntities(_dbContext.Movies).FirstOrDefaultAsync(m => m.Id == movieId);
+
+        }
+
         public async Task<IEnumerable<Movie>> GetMoviesAsync(MovieListQueryParameters filterParameters)
         {
             var projetions = await MapEntities(_dbContext.Movies).ToListAsync();

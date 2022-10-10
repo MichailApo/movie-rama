@@ -7,5 +7,7 @@ namespace Application.Services
         Task AddReactionAsync(Reaction reaction);
 
         Task<IEnumerable<Reaction>> GetUserReactionsAsync(int userId);
+
+        Task RemoveReactionAsync(int userId, int movieId);
     }
 }

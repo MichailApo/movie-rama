@@ -109,5 +109,36 @@ namespace Infrastructure.Sql.Integration
             actualMovie.NumberOfLikes.Should().Be(1);
             
         }
+
+        [Fact]
+        public async Task GetMovieByIdAsync_Fetches_A_Movie()
+        {
+            //Arrange
+            var userId = 1;
+            var aMovie = Movie.CreateNew("asd", "asd", new MovieRamaWeb.Domain.User(userId, ""), DateTime.UtcNow);
+
+            //Act
+            var movieId = await _MovieReposut.AddMovieAsync(aMovie);
+            var actual = await _MovieReposut.GetMovieByIdAsync(movieId);
+
+            actual.Should().NotBeNull();
+            actual.Creator.Id.Should().Be(userId);
+            
+        }
+
+        [Fact]
+        public async Task GetMovieByIdAsync_Returns_Null_When_Movie_Not_Exists ()
+        {
+            //Arrange
+            var userId = 1;
+            var aMovie = Movie.CreateNew("asd", "asd", new MovieRamaWeb.Domain.User(userId, ""), DateTime.UtcNow);
+
+            //Act
+            var movieId = await _MovieReposut.AddMovieAsync(aMovie);
+            var actual = await _MovieReposut.GetMovieByIdAsync(0);
+
+            actual.Should().BeNull();
+
+        }
     }
 }
