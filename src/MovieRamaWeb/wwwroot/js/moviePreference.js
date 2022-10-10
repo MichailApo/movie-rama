@@ -32,4 +32,7 @@ function handleFail(res) {
     if (res.status == 401) {
         window.location = "/Identity/Account/Login";
     }
+    if (res.responseJSON.message) {
+        alert(res.responseJSON.message);
+    }
 }

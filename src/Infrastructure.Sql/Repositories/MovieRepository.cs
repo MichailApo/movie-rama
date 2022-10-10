@@ -35,7 +35,7 @@ namespace MovieRamaWeb.Data.Repositories
         public async Task<Movie?> GetMovieByIdAsync(int movieId)
         {
             
-            return await MapEntities(_dbContext.Movies).FirstOrDefaultAsync(m => m.Id == movieId);
+            return await MapEntities(_dbContext.Movies.Where(m=>m.Id == movieId)).FirstOrDefaultAsync();
 
         }
 

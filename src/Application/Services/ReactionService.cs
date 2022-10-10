@@ -1,4 +1,6 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities;
+using Domain.Enums;
+using Domain.Exceptions;
 using Microsoft.Extensions.Logging;
 using MovieRamaWeb.Application.Services;
 using System.Security.Claims;
@@ -10,12 +12,17 @@ namespace Application.Services
         private readonly ILogger<ReactionService> _logger;
         private readonly IReactionRepository _reactionRepository;
         private readonly IAuthService _authService;
+        private readonly IMovieRepository _movieRepository;
 
-        public ReactionService(ILogger<ReactionService> logger, IReactionRepository reactionRepository, IAuthService authService)
+        public ReactionService(ILogger<ReactionService> logger,
+            IReactionRepository reactionRepository,
+            IAuthService authService,
+            IMovieRepository movieRepository)
         {
             _logger = logger;
             _reactionRepository = reactionRepository;
             _authService = authService;
+            _movieRepository = movieRepository;
         }
 
         /// <summary>
@@ -42,6 +49,28 @@ namespace Application.Services
                 return new Dictionary<int, PreferenceType>();
             }
 
+        }
+
+        public async Task AddReactionAsync(Reaction reaction)
+        {
+            var movie = await _movieRepository.GetMovieByIdAsync(reaction.MovieId);
+            if (movie == null)
+            {
+                throw new NotFoundException($"Movie Id {reaction.MovieId} not found");
+            }
+
+            if (movie.Creator.Id == reaction.UserId)
+            {
+                throw new ValidationException("You cannot add preference on your own movies");
+            }
+
+            await _reactionRepository.AddReactionAsync(reaction);
+
+        }
+
+        public async Task RemoveReaction(int userId, int movieId)
+        {
+            await _reactionRepository.RemoveReactionAsync(userId, movieId);
         }
     }
 }
