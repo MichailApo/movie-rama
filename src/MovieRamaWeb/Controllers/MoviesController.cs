@@ -17,5 +17,12 @@ namespace MovieRamaWeb.Controllers
 
             return Ok();
         }
+
+        [HttpPost("/movie/{id}/hate")]
+        public async Task<IActionResult> HateMovieAsync([FromRoute] int id)
+        {
+
+            return Ok();
+        }
     }
 }

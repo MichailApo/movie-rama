@@ -4,6 +4,7 @@
 @using MovieRamaWeb.Data
 @using MovieRamaWeb.Domain.Enums;
 @inject SignInManager<User> SignInManager
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Home page";
 }
@@ -45,8 +46,8 @@
             <br>
             <p>@movie.Description</p>
             <div class="row">
-                <a href="">@movie.NumberOfLikes likes</a>
-                <a href="">@movie.NumberOfHates hates</a>
+                <a class="submitLike" href="" data-id="@movie.Id">@movie.NumberOfLikes likes</a>
+                <a class="submitHate" href="" data-id="@movie.Id">@movie.NumberOfHates hates</a>
 
             </div>
         }
@@ -58,6 +59,13 @@
         }
     </div>
 </div>
+
+
+@section Scripts {
+    <script src="~/js/moviePreference.js">
+        
+   </script>
+}
 
 
 
