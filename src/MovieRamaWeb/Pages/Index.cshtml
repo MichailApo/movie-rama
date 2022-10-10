@@ -46,10 +46,17 @@
             <br>
             <p>@movie.Description</p>
             <div class="row">
-                <a class="submitLike" href="" data-id="@movie.Id">@movie.NumberOfLikes likes</a>
-                <a class="submitHate" href="" data-id="@movie.Id">@movie.NumberOfHates hates</a>
-                <a>@movie.PreferenceText</a>
+                <a class="submitLike col-md-2" href="" data-id="@movie.Id">@movie.NumberOfLikes likes</a>
+                <a class="submitHate col-md-2" href="" data-id="@movie.Id">@movie.NumberOfHates hates</a>
             </div>
+            @if(movie.UserPreference != null)
+            {
+                <div class="row">
+                    <p class="col-md-4">@movie.PreferenceText</p>
+                    <a class="submitRemove col-md-4" href="" data-id="@movie.Id">Click to remove</a>
+                </div>
+            }
+            
         }
     </div>
     <div class="col-md-2">

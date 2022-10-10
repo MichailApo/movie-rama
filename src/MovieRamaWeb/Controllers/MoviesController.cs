@@ -86,7 +86,7 @@ namespace MovieRamaWeb.Controllers
             {
                 var user = _authService.GetUser(User);
 
-                await _reactionService.AddReactionAsync(Reaction.Create(user.Id, id, PreferenceType.Hate));
+                await _reactionService.RemoveReactionAsync(user.Id,id);
             }
             catch (NotFoundException ex)
             {

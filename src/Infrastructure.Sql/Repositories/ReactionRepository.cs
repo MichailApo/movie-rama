@@ -35,7 +35,7 @@ namespace Infrastructure.Sql.Repositories
                 return;
             }
 
-            if (existing.Preference == reaction.Preference)
+            if (existing.Preference == reaction.Preference && existing.Active)
             {
                 //No-op
                 return;

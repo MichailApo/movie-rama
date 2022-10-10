@@ -68,7 +68,7 @@ namespace Application.Services
 
         }
 
-        public async Task RemoveReaction(int userId, int movieId)
+        public async Task RemoveReactionAsync(int userId, int movieId)
         {
             await _reactionRepository.RemoveReactionAsync(userId, movieId);
         }

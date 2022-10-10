@@ -80,7 +80,7 @@ namespace Infrastructure.Sql.Integration
         }
         
         [Fact]
-        public async Task RemoveReactionAsync_Adding_A_Reaction_With_Different_Preference_Update_Preference()
+        public async Task RemoveReactionAsync_Removes_User_Reaction()
         {
             var aMovie = Movie.CreateNew("asd", "asd", new MovieRamaWeb.Domain.User(1, ""), DateTime.UtcNow);
             var movieId = await _MovieReposut.AddMovieAsync(aMovie);
@@ -89,6 +89,19 @@ namespace Infrastructure.Sql.Integration
             await _ReactionRepoSut.RemoveReactionAsync(1,movieId);
             _dbContext.MovieReactions.Should().HaveCount(1);
             _dbContext.MovieReactions.Count(f => f.Active).Should().Be(0, "Soft deletes reactions");
+        }
+
+        [Fact]
+        public async Task Add_Reaction_After_Remove_Should_Activate_Reaction()
+        {
+            var aMovie = Movie.CreateNew("asd", "asd", new MovieRamaWeb.Domain.User(1, ""), DateTime.UtcNow);
+            var movieId = await _MovieReposut.AddMovieAsync(aMovie);
+
+            await _ReactionRepoSut.AddReactionAsync(Reaction.Create(1, movieId, Domain.Enums.PreferenceType.Like));
+            await _ReactionRepoSut.RemoveReactionAsync(1, movieId);
+            await _ReactionRepoSut.AddReactionAsync(Reaction.Create(1, movieId, Domain.Enums.PreferenceType.Like));
+            _dbContext.MovieReactions.Should().HaveCount(1);
+            _dbContext.MovieReactions.Count(f => f.Active).Should().Be(1, "update if found");
         }
     }
 }

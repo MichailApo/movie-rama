@@ -7,6 +7,7 @@
             url: url
         })
             .done(function () {
+                location.reload(true);
             })
             .fail(function (res) {
                 handleFail(res);
@@ -21,6 +22,22 @@
             url: url
         })
             .done(function () {
+                location.reload(true);
+            })
+            .fail(function (res) {
+                handleFail(res);
+            });
+    });
+
+    $('.submitRemove').on('click', function (evt) {
+        evt.preventDefault();
+        let url = "movie/" + $(this).data("id") + "/remove-reaction"
+        $.ajax({
+            type: "POST",
+            url: url
+        })
+            .done(function () {
+                location.reload(true);
             })
             .fail(function (res) {
                 handleFail(res);

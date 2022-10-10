@@ -8,6 +8,6 @@ namespace Application.Services
     {
         Task<IDictionary<int, PreferenceType>> GetUserReactionsAsync(ClaimsPrincipal claimsPrincipal);
         Task AddReactionAsync(Reaction reaction);
-        Task RemoveReaction(int userId,int movieId);
+        Task RemoveReactionAsync(int userId,int movieId);
     }
 }
